@@ -33,6 +33,8 @@ include "framework-docs"
 include "framework-platform"
 include "integration-tests"
 
+include 'spring-caesar-learn'
+
 rootProject.name = "spring"
 rootProject.children.each {project ->
 	project.buildFileName = "${project.name}.gradle"
@@ -53,3 +55,5 @@ settings.gradle.projectsLoaded {
 		}
 	}
 }
+
+
