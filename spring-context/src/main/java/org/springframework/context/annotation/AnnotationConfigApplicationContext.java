@@ -88,7 +88,9 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 * {@link Configuration @Configuration} classes
 	 */
 	public AnnotationConfigApplicationContext(Class<?>... componentClasses) {
+		// 调用空参构造方法（获取AnnotatedBeanDefinitionReader和ClassPathBeanDefinitionScanner）
 		this();
+		// 注册一个或者多个要处理的组件类
 		register(componentClasses);
 		refresh();
 	}

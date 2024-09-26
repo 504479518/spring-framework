@@ -1,5 +1,6 @@
 package org.spring.caesar.learn;
 
+import org.spring.caesar.learn.applicationEventListener.MyEventPublisher;
 import org.spring.caesar.learn.service.IPersonService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
@@ -18,25 +19,26 @@ public class CaesarApplication {
 		IPersonService personService = applicationContext.getBean(IPersonService.class);
 		personService.speak();
 		personService.jump();
-		// public interface ApplicationContext extends EnvironmentCapable, ListableBeanFactory, HierarchicalBeanFactory,
-		//		MessageSource, ApplicationEventPublisher, ResourcePatternResolver
-		// applicationContext.getMessage("test", null, new Locale("en_CN"));
+		// 国际化
+		//		 public interface ApplicationContext extends EnvironmentCapable, ListableBeanFactory, HierarchicalBeanFactory,
+		//				 MessageSource, ApplicationEventPublisher, ResourcePatternResolver
+		applicationContext.getMessage("test", null, new Locale("en_CN"));
 
 		// ApplicationContext还拥有资源加载的功能，比如，可以直接利用ApplicationContext获取某个文件的内容：
-		Resource resource = applicationContext.getResource("file://D:\\java code\\github\\spring-framework\\spring-caesar-learn\\src\\main\\java\\org\\spring\\caesar\\learn\\domain\\User.java");
+		/*Resource resource = applicationContext.getResource("file://D:\\java code\\github\\spring-framework\\spring-caesar-learn\\src\\main\\java\\org\\spring\\caesar\\learn\\domain\\User.java");
 		System.out.println(resource.contentLength());
-		System.out.println(resource.getFilename());
+		System.out.println(resource.getFilename());*/
 
 		Resource resource1 = applicationContext.getResource("https://www.baidu.com");
 		System.out.println(resource1.contentLength());
 		System.out.println(resource1.getURL());
 
-		/*Resource resource2 = applicationContext.getResource("classpath:spring.xml");
+		Resource resource2 = applicationContext.getResource("classpath:spring.xml");
 		System.out.println(resource2.contentLength());
-		System.out.println(resource2.getURL());*/
+		System.out.println(resource2.getURL());
 
 		// 还可以一次性获取多个：
-		Resource[] resources = applicationContext.getResources("classpath:org/caesarr/*.class");
+		Resource[] resources = applicationContext.getResources("classpath:org/spring/caesar/**/*.class");
 		for (Resource resource4 : resources) {
 			System.out.println(resource4.contentLength());
 			System.out.println(resource4.getFilename());

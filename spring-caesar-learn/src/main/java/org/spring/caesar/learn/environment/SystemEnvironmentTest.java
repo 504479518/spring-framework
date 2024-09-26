@@ -12,12 +12,12 @@ public class SystemEnvironmentTest {
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(CaesarApplication.class);
 
 		Map<String, Object> systemEnvironment = context.getEnvironment().getSystemEnvironment();
-		System.out.println(systemEnvironment);
+		System.out.println("操作系统环境变量： "+systemEnvironment);
 
 		System.out.println("=======");
 
 		Map<String, Object> systemProperties = context.getEnvironment().getSystemProperties();
-		System.out.println(systemProperties);
+		System.out.println("系统运行参数（-D后面跟的那些）"+systemProperties);
 
 		System.out.println("=======");
 
@@ -26,8 +26,8 @@ public class SystemEnvironmentTest {
 
 		System.out.println("=======");
 
-		System.out.println(context.getEnvironment().getProperty("NO_PROXY"));
+		System.out.println(context.getEnvironment().getProperty("java.class.path"));
 		System.out.println(context.getEnvironment().getProperty("sun.jnu.encoding"));
-		System.out.println(context.getEnvironment().getProperty("caesar"));
+		System.out.println(context.getEnvironment().getProperty("sun.management.compiler"));
 	}
 }

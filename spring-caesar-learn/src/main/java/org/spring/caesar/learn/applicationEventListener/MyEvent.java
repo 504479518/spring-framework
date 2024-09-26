@@ -7,14 +7,7 @@ import java.time.Clock;
 
 public class MyEvent extends ApplicationEvent {
 
-	private Task task;
-
-	public MyEvent(Task task) {
-		super(task);
-		this.task = task;
-	}
-
-	public MyEvent(Task task, Clock clock) {
-		super(task, clock);
+	public MyEvent(Object source) {
+		super(source);
 	}
 }
