@@ -422,7 +422,7 @@ public abstract class AbstractBeanDefinition extends BeanMetadataAttributeAccess
 	}
 
 	/**
-	 * Specify the class for this bean.
+	 * 指定该 bean 的类。
 	 * @see #setBeanClassName(String)
 	 */
 	public void setBeanClass(@Nullable Class<?> beanClass) {

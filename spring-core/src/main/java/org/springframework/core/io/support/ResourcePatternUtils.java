@@ -21,7 +21,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ResourceUtils;
 
 /**
- * Utility class for determining whether a given URL is a resource
+ * 用于确定给定 URL 是否为资源的实用程序类
  * location that can be loaded via a {@link ResourcePatternResolver}.
  *
  * <p>Callers will usually assume that a location is a relative path
@@ -49,12 +49,12 @@ public abstract class ResourcePatternUtils {
 	}
 
 	/**
-	 * Return a default {@link ResourcePatternResolver} for the given {@link ResourceLoader}.
-	 * <p>This might be the {@code ResourceLoader} itself, if it implements the
-	 * {@code ResourcePatternResolver} extension, or a default
-	 * {@link PathMatchingResourcePatternResolver} built on the given {@code ResourceLoader}.
-	 * @param resourceLoader the ResourceLoader to build a pattern resolver for
-	 * (may be {@code null} to indicate a default ResourceLoader)
+	 * 返回给定 {@link ResourceLoader} 的默认 {@link ResourcePatternResolver}。
+	 * <p>这可能是 {@code ResourceLoader} 本身，如果它实现了
+	 * {@code ResourcePatternResolver} 扩展，或默认
+	 * {@link PathMatchingResourcePatternResolver}基于给定的 {@code ResourceLoader} 构建。
+	 * @param resourceLoader 用于构建模式解析器的 ResourceLoader
+	 * （可以是 {@code null} 来指示默认的 ResourceLoader）
 	 * @return the ResourcePatternResolver
 	 * @see PathMatchingResourcePatternResolver
 	 */

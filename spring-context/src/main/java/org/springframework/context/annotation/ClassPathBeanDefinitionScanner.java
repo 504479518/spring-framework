@@ -78,7 +78,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 
 
 	/**
-	 * Create a new {@code ClassPathBeanDefinitionScanner} for the given bean factory.
+	 * 为给定的 bean 工厂创建一个新的 {@code ClassPathBeanDefinitionScanner}。
 	 * @param registry the {@code BeanFactory} to load bean definitions into, in the form
 	 * of a {@code BeanDefinitionRegistry}
 	 */
@@ -144,16 +144,16 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 
 	/**
 	 * Create a new {@code ClassPathBeanDefinitionScanner} for the given bean factory and
-	 * using the given {@link Environment} when evaluating bean definition profile metadata.
-	 * @param registry the {@code BeanFactory} to load bean definitions into, in the form
+	 * 在评估 bean 定义配置文件元数据时使用给定的 {@link Environment}。
+	 * @param registry 将 bean 定义加载到的 {@code BeanFactory}，格式为
 	 * of a {@code BeanDefinitionRegistry}
-	 * @param useDefaultFilters whether to include the default filters for the
+	 * @param useDefaultFilters 是否包含默认过滤器
 	 * {@link org.springframework.stereotype.Component @Component},
 	 * {@link org.springframework.stereotype.Repository @Repository},
 	 * {@link org.springframework.stereotype.Service @Service}, and
 	 * {@link org.springframework.stereotype.Controller @Controller} stereotype annotations
 	 * @param environment the Spring {@link Environment} to use when evaluating bean
-	 * definition profile metadata
+	 * 定义配置文件元数据
 	 * @param resourceLoader the {@link ResourceLoader} to use
 	 * @since 4.3.6
 	 */
@@ -166,7 +166,9 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
 		if (useDefaultFilters) {
 			registerDefaultFilters();
 		}
+		// 设置解析占位符和评估时使用的环境
 		setEnvironment(environment);
+		// 读取资源
 		setResourceLoader(resourceLoader);
 	}
 

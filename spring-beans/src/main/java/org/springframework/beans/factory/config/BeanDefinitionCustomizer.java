@@ -28,7 +28,7 @@ package org.springframework.beans.factory.config;
 public interface BeanDefinitionCustomizer {
 
 	/**
-	 * Customize the given bean definition.
+	 * 自定义给定的 bean 定义。
 	 */
 	void customize(BeanDefinition bd);
 

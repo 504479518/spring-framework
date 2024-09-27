@@ -40,7 +40,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.ClassUtils;
 
 /**
- * Utility class that allows for convenient registration of common
+ * 实用程序类，可以方便地注册常见的
  * {@link org.springframework.beans.factory.config.BeanPostProcessor} and
  * {@link org.springframework.beans.factory.config.BeanFactoryPostProcessor}
  * definitions for annotation-based configuration. Also registers a common

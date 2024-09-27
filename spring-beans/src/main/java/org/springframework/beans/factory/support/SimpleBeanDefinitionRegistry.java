@@ -27,16 +27,16 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 /**
- * Simple implementation of the {@link BeanDefinitionRegistry} interface.
- * Provides registry capabilities only, with no factory capabilities built in.
- * Can for example be used for testing bean definition readers.
+ * {@link BeanDefinitionRegistry} 接口的简单实现。
+ * 仅提供注册表功能，没有内置工厂功能。
+ * 例如可用于测试 bean 定义读取器。
  *
  * @author Juergen Hoeller
  * @since 2.5.2
  */
 public class SimpleBeanDefinitionRegistry extends SimpleAliasRegistry implements BeanDefinitionRegistry {
 
-	/** Map of bean definition objects, keyed by bean name. */
+	/** bean 定义对象的映射，以 bean 名称为键。 */
 	private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>(64);
 
 
@@ -44,8 +44,8 @@ public class SimpleBeanDefinitionRegistry extends SimpleAliasRegistry implements
 	public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition)
 			throws BeanDefinitionStoreException {
 
-		Assert.hasText(beanName, "'beanName' must not be empty");
-		Assert.notNull(beanDefinition, "BeanDefinition must not be null");
+		Assert.hasText(beanName, "'beanName' 不能为空");
+		Assert.notNull(beanDefinition, "BeanDefinition 不能为空");
 		this.beanDefinitionMap.put(beanName, beanDefinition);
 	}
 

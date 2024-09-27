@@ -65,10 +65,10 @@ public class CachingMetadataReaderFactory extends SimpleMetadataReaderFactory {
 	}
 
 	/**
-	 * Create a new CachingMetadataReaderFactory for the given {@link ResourceLoader},
-	 * using a shared resource cache if supported or a local resource cache otherwise.
-	 * @param resourceLoader the Spring ResourceLoader to use
-	 * (also determines the ClassLoader to use)
+	 * 为给定的 {@link ResourceLoader} 创建一个新的 CachingMetadataReaderFactory，
+	 * 如果支持，则使用共享资源缓存，否则使用本地资源缓存。
+	 * @param resourceLoader 要使用的 Spring ResourceLoader
+	 * （还确定要使用的类加载器）
 	 * @see DefaultResourceLoader#getResourceCache
 	 */
 	public CachingMetadataReaderFactory(@Nullable ResourceLoader resourceLoader) {

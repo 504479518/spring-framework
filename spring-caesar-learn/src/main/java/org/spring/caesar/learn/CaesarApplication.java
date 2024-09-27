@@ -16,6 +16,7 @@ public class CaesarApplication {
 
 	public static void main(String[] args) throws IOException {
 		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(CaesarApplication.class);
+
 		IPersonService personService = applicationContext.getBean(IPersonService.class);
 		personService.speak();
 		personService.jump();
