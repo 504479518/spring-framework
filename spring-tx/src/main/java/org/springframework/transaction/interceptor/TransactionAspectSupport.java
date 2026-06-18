@@ -88,6 +88,8 @@ import org.springframework.util.StringUtils;
  * @see #setTransactionAttributes
  * @see #setTransactionAttributeSource
  */
+// 学习注释（源码阅读）：事务拦截模板逻辑，负责创建事务、提交、回滚。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public abstract class TransactionAspectSupport implements BeanFactoryAware, InitializingBean {
 
 	// NOTE: This class must not implement Serializable because it serves as base
@@ -339,12 +341,17 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 	 * @throws Throwable propagated from the target invocation
 	 */
 	@Nullable
+	// 学习注释：事务执行模板主线：解析事务属性、创建事务、调用目标方法、提交或回滚。
 	protected Object invokeWithinTransaction(Method method, @Nullable Class<?> targetClass,
 			final InvocationCallback invocation) throws Throwable {
 
 		// If the transaction attribute is null, the method is non-transactional.
+		// 学习注释：第 1 步——获取事务属性源（解析 @Transactional 注解）
 		TransactionAttributeSource tas = getTransactionAttributeSource();
+		// 从方法/类上解析 @Transactional 属性：propagation、isolation、rollbackFor 等
+		// 如果方法没有 @Transactional，txAttr 为 null，后面不会创建事务
 		final TransactionAttribute txAttr = (tas != null ? tas.getTransactionAttribute(method, targetClass) : null);
+		// 学习注释：第 2 步——确定事务管理器（DataSourceTransactionManager 等）
 		final TransactionManager tm = determineTransactionManager(txAttr, targetClass);
 
 		if (this.reactiveAdapterRegistry != null && tm instanceof ReactiveTransactionManager rtm) {
@@ -371,20 +378,25 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 
 		if (txAttr == null || !(ptm instanceof CallbackPreferringPlatformTransactionManager cpptm)) {
 			// Standard transaction demarcation with getTransaction and commit/rollback calls.
+			// 学习注释：第 3 步——创建事务（根据传播行为决定是新建、加入还是挂起）
+			// 内部调用 transactionManager.getTransaction(txAttr)，详见 AbstractPlatformTransactionManager
 			TransactionInfo txInfo = createTransactionIfNecessary(ptm, txAttr, joinpointIdentification);
 
 			Object retVal;
 			try {
-				// This is an around advice: Invoke the next interceptor in the chain.
-				// This will normally result in a target object being invoked.
+				// 学习注释：第 4 步——执行目标方法（你的业务代码）
+				// 方法体内的 SQL 操作会使用事务管理器绑定到 ThreadLocal 中的数据库连接
 				retVal = invocation.proceedWithInvocation();
 			}
 			catch (Throwable ex) {
-				// target invocation exception
+				// 学习注释：第 5 步——异常处理
+				// 根据 rollbackOn() 判断：RuntimeException/Error 默认回滚；受检异常默认提交！
+				// 常见坑：抛受检异常时事务不回滚，需配置 @Transactional(rollbackFor = Exception.class)
 				completeTransactionAfterThrowing(txInfo, ex);
 				throw ex;
 			}
 			finally {
+				// 学习注释：第 6 步——清理事务信息（从 ThreadLocal 移除当前 TransactionInfo）
 				cleanupTransactionInfo(txInfo);
 			}
 
@@ -413,6 +425,9 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 				}
 			}
 
+			// 学习注释：第 7 步——正常返回 → 提交事务
+			// 内部调用 transactionManager.commit()，触发 connection.commit()
+			// 注意：如果是 REQUIRED 加入外层事务，这里不会真正提交，等外层一起提交
 			commitTransactionAfterReturning(txInfo);
 			return retVal;
 		}
@@ -690,6 +705,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 	 * Do nothing if we didn't create a transaction.
 	 * @param txInfo information about the current transaction
 	 */
+	// 学习注释：目标方法正常返回后的提交入口。
 	protected void commitTransactionAfterReturning(@Nullable TransactionInfo txInfo) {
 		if (txInfo != null && txInfo.getTransactionStatus() != null) {
 			if (logger.isTraceEnabled()) {
@@ -705,6 +721,7 @@ public abstract class TransactionAspectSupport implements BeanFactoryAware, Init
 	 * @param txInfo information about the current transaction
 	 * @param ex throwable encountered
 	 */
+	// 学习注释：目标方法抛异常后的事务完成入口：根据 rollbackOn 判断回滚还是提交。
 	protected void completeTransactionAfterThrowing(@Nullable TransactionInfo txInfo, Throwable ex) {
 		if (txInfo != null && txInfo.getTransactionStatus() != null) {
 			if (logger.isTraceEnabled()) {

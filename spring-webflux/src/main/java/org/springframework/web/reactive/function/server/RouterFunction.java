@@ -33,6 +33,8 @@ import org.springframework.util.Assert;
  * @see RouterFunctions
  */
 @FunctionalInterface
+// 学习注释（源码阅读）：WebFlux 函数式路由接口。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface RouterFunction<T extends ServerResponse> {
 
 	/**

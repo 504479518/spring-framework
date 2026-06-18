@@ -59,6 +59,8 @@ import org.springframework.util.ObjectUtils;
  * @see Qualifier
  * @see Value
  */
+// 学习注释（源码阅读）：处理 @Qualifier、@Value 等注解的候选解析器。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class QualifierAnnotationAutowireCandidateResolver extends GenericTypeAwareAutowireCandidateResolver {
 
 	private final Set<Class<? extends Annotation>> qualifierTypes = CollectionUtils.newLinkedHashSet(2);

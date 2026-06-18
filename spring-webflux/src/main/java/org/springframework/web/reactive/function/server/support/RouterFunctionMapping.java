@@ -48,6 +48,8 @@ import org.springframework.web.util.pattern.PathPattern;
  * @author Arjen Poutsma
  * @since 5.0
  */
+// 学习注释（源码阅读）：把 RouterFunction 接入 DispatcherHandler 的 HandlerMapping。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class RouterFunctionMapping extends AbstractHandlerMapping implements InitializingBean {
 
 	@Nullable
@@ -150,6 +152,7 @@ public class RouterFunctionMapping extends AbstractHandlerMapping implements Ini
 
 
 	@Override
+	// 学习注释：函数式路由匹配入口：从 RouterFunction 中查找匹配当前请求的 HandlerFunction。
 	protected Mono<?> getHandlerInternal(ServerWebExchange exchange) {
 		if (this.routerFunction != null) {
 			ServerRequest request = ServerRequest.create(exchange, this.messageReaders);

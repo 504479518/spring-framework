@@ -57,6 +57,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  * @author Brian Clozel
  * @since 3.1
  */
+// 学习注释（源码阅读）：查找异常类型对应 @ExceptionHandler 方法。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class ExceptionHandlerMethodResolver {
 
 	/**

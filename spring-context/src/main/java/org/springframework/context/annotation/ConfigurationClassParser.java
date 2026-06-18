@@ -99,6 +99,8 @@ import org.springframework.util.StringUtils;
  * @since 3.0
  * @see ConfigurationClassBeanDefinitionReader
  */
+// 学习注释（源码阅读）：配置类解析器，重点看它如何递归处理扫描、导入和 @Bean 方法。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 class ConfigurationClassParser {
 
 	private static final Predicate<String> DEFAULT_EXCLUSION_FILTER = className ->

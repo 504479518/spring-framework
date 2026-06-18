@@ -86,6 +86,8 @@ import org.springframework.util.Assert;
  * @see org.springframework.transaction.jta.JtaTransactionManager
  */
 @SuppressWarnings("serial")
+// 学习注释（源码阅读）：事务管理模板实现，定义传播行为处理骨架。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public abstract class AbstractPlatformTransactionManager
 		implements PlatformTransactionManager, ConfigurableTransactionManager, Serializable {
 
@@ -370,30 +372,35 @@ public abstract class AbstractPlatformTransactionManager
 	 * @see #doBegin
 	 */
 	@Override
+	// 学习注释：事务获取入口：根据当前线程是否已有事务决定新建、加入、挂起或报错。
+	// 这是 Spring 事务传播行为的核心实现，建议断点调试。
 	public final TransactionStatus getTransaction(@Nullable TransactionDefinition definition)
 			throws TransactionException {
 
-		// Use defaults if no transaction definition given.
 		TransactionDefinition def = (definition != null ? definition : TransactionDefinition.withDefaults());
 
+		// 学习注释：获取当前线程的事务对象（检查 ThreadLocal 中是否已绑定数据库连接）
+		// 对 DataSourceTransactionManager：从 ConnectionHolder 中获取当前连接
 		Object transaction = doGetTransaction();
 		boolean debugEnabled = logger.isDebugEnabled();
 
 		if (isExistingTransaction(transaction)) {
-			// Existing transaction found -> check propagation behavior to find out how to behave.
+			// 学习注释：当前线程已有事务 → 进入传播行为判断逻辑
 			return handleExistingTransaction(def, transaction, debugEnabled);
 		}
 
-		// Check definition settings for new transaction.
+		// ========== 以下是「当前线程无事务」的情况 ==========
+
 		if (def.getTimeout() < TransactionDefinition.TIMEOUT_DEFAULT) {
 			throw new InvalidTimeoutException("Invalid transaction timeout", def.getTimeout());
 		}
 
-		// No existing transaction found -> check propagation behavior to find out how to proceed.
+		// 学习注释：MANDATORY——强制要求已有事务，否则报错
 		if (def.getPropagationBehavior() == TransactionDefinition.PROPAGATION_MANDATORY) {
 			throw new IllegalTransactionStateException(
 					"No existing transaction found for transaction marked with propagation 'mandatory'");
 		}
+		// 学习注释：REQUIRED / REQUIRES_NEW / NESTED——无事务时新建事务
 		else if (def.getPropagationBehavior() == TransactionDefinition.PROPAGATION_REQUIRED ||
 				def.getPropagationBehavior() == TransactionDefinition.PROPAGATION_REQUIRES_NEW ||
 				def.getPropagationBehavior() == TransactionDefinition.PROPAGATION_NESTED) {
@@ -402,6 +409,7 @@ public abstract class AbstractPlatformTransactionManager
 				logger.debug("Creating new transaction with name [" + def.getName() + "]: " + def);
 			}
 			try {
+				// 启动新事务（内部调用 doBegin → 获取数据库连接、关闭 autoCommit）
 				return startTransaction(def, transaction, false, debugEnabled, suspendedResources);
 			}
 			catch (RuntimeException | Error ex) {
@@ -410,7 +418,7 @@ public abstract class AbstractPlatformTransactionManager
 			}
 		}
 		else {
-			// Create "empty" transaction: no actual transaction, but potentially synchronization.
+			// 学习注释：SUPPORTS / NOT_SUPPORTED / NEVER——无事务时以非事务方式执行
 			if (def.getIsolationLevel() != TransactionDefinition.ISOLATION_DEFAULT && logger.isWarnEnabled()) {
 				logger.warn("Custom isolation level specified but no actual transaction initiated; " +
 						"isolation level will effectively be ignored: " + def);
@@ -423,40 +431,52 @@ public abstract class AbstractPlatformTransactionManager
 	/**
 	 * Create a TransactionStatus for an existing transaction.
 	 */
+	// 学习注释：当前线程已有事务时，根据传播行为决定如何处理。
+	// 这是面试常问的「七种传播行为」的实现位置！
 	private TransactionStatus handleExistingTransaction(
 			TransactionDefinition definition, Object transaction, boolean debugEnabled)
 			throws TransactionException {
 
+		// 学习注释：NEVER——不允许存在事务，直接报错
 		if (definition.getPropagationBehavior() == TransactionDefinition.PROPAGATION_NEVER) {
 			throw new IllegalTransactionStateException(
 					"Existing transaction found for transaction marked with propagation 'never'");
 		}
 
+		// 学习注释：NOT_SUPPORTED——挂起当前事务，以非事务方式执行
 		if (definition.getPropagationBehavior() == TransactionDefinition.PROPAGATION_NOT_SUPPORTED) {
 			if (debugEnabled) {
 				logger.debug("Suspending current transaction");
 			}
+			// 挂起当前事务（保存连接状态到 SuspendedResourcesHolder，从 ThreadLocal 移除）
 			Object suspendedResources = suspend(transaction);
 			boolean newSynchronization = (getTransactionSynchronization() == SYNCHRONIZATION_ALWAYS);
 			return prepareTransactionStatus(
 					definition, null, false, newSynchronization, debugEnabled, suspendedResources);
 		}
 
+		// 学习注释：REQUIRES_NEW——挂起当前事务，启动全新事务（新连接、新事务）
+		// 典型场景：审批流中操作日志必须单独提交，不随业务回滚
 		if (definition.getPropagationBehavior() == TransactionDefinition.PROPAGATION_REQUIRES_NEW) {
 			if (debugEnabled) {
 				logger.debug("Suspending current transaction, creating new transaction with name [" +
 						definition.getName() + "]");
 			}
+			// 挂起外层事务
 			SuspendedResourcesHolder suspendedResources = suspend(transaction);
 			try {
+				// 启动新事务
 				return startTransaction(definition, transaction, false, debugEnabled, suspendedResources);
 			}
 			catch (RuntimeException | Error beginEx) {
+				// 新事务启动失败，恢复外层事务
 				resumeAfterBeginException(transaction, suspendedResources, beginEx);
 				throw beginEx;
 			}
 		}
 
+		// 学习注释：NESTED——嵌套事务（通过 Savepoint 实现）
+		// 嵌套事务可以单独回滚到 Savepoint，不影响外层事务
 		if (definition.getPropagationBehavior() == TransactionDefinition.PROPAGATION_NESTED) {
 			if (!isNestedTransactionAllowed()) {
 				throw new NestedTransactionNotSupportedException(
@@ -467,13 +487,12 @@ public abstract class AbstractPlatformTransactionManager
 				logger.debug("Creating nested transaction with name [" + definition.getName() + "]");
 			}
 			if (useSavepointForNestedTransaction()) {
-				// Create savepoint within existing Spring-managed transaction,
-				// through the SavepointManager API implemented by TransactionStatus.
-				// Usually uses JDBC savepoints. Never activates Spring synchronization.
+				// 学习注释：通过 JDBC Savepoint 实现嵌套事务
 				DefaultTransactionStatus status = newTransactionStatus(
 						definition, transaction, false, false, true, debugEnabled, null);
 				this.transactionExecutionListeners.forEach(listener -> listener.beforeBegin(status));
 				try {
+					// 创建并持有 Savepoint
 					status.createAndHoldSavepoint();
 				}
 				catch (RuntimeException | Error ex) {
@@ -484,15 +503,12 @@ public abstract class AbstractPlatformTransactionManager
 				return status;
 			}
 			else {
-				// Nested transaction through nested begin and commit/rollback calls.
-				// Usually only for JTA: Spring synchronization might get activated here
-				// in case of a pre-existing JTA transaction.
 				return startTransaction(definition, transaction, true, debugEnabled, null);
 			}
 		}
 
-		// PROPAGATION_REQUIRED, PROPAGATION_SUPPORTS, PROPAGATION_MANDATORY:
-		// regular participation in existing transaction.
+		// 学习注释：REQUIRED / SUPPORTS / MANDATORY——加入当前已有事务
+		// 这是最常见的情况：内层方法和外层方法共用同一个数据库连接和事务
 		if (debugEnabled) {
 			logger.debug("Participating in existing transaction");
 		}
@@ -732,6 +748,7 @@ public abstract class AbstractPlatformTransactionManager
 	 * @see #rollback
 	 */
 	@Override
+	// 学习注释：事务提交模板入口：提交前会检查 rollback-only 等状态。
 	public final void commit(TransactionStatus status) throws TransactionException {
 		if (status.isCompleted()) {
 			throw new IllegalTransactionStateException(
@@ -856,6 +873,7 @@ public abstract class AbstractPlatformTransactionManager
 	 * @see #doSetRollbackOnly
 	 */
 	@Override
+	// 学习注释：事务回滚模板入口。
 	public final void rollback(TransactionStatus status) throws TransactionException {
 		if (status.isCompleted()) {
 			throw new IllegalTransactionStateException(

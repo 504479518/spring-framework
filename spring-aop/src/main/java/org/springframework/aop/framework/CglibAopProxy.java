@@ -84,6 +84,8 @@ import org.springframework.util.ObjectUtils;
  * @see DefaultAopProxyFactory
  */
 @SuppressWarnings("serial")
+// 学习注释（源码阅读）：CGLIB 代理实现，适合无接口或强制类代理场景。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 class CglibAopProxy implements AopProxy, Serializable {
 
 	// Constants for CGLIB callback array indices
@@ -465,6 +467,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 
 		@Override
 		@Nullable
+		// 学习注释：CGLIB 代理的方法拦截入口：无接口代理或强制类代理时重点看这里。
 		public Object intercept(Object proxy, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
 			Object retVal = AopUtils.invokeJoinpointUsingReflection(this.target, method, args);
 			return processReturnType(proxy, this.target, method, args, retVal);

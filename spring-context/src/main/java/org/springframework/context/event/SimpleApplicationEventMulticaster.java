@@ -49,6 +49,8 @@ import org.springframework.util.ErrorHandler;
  * @author Brian Clozel
  * @see #setTaskExecutor
  */
+// 学习注释（源码阅读）：默认事件广播器实现。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class SimpleApplicationEventMulticaster extends AbstractApplicationEventMulticaster {
 
 	@Nullable
@@ -134,6 +136,7 @@ public class SimpleApplicationEventMulticaster extends AbstractApplicationEventM
 	}
 
 	@Override
+	// 学习注释：事件广播入口：把 ApplicationEvent 分发给匹配的 ApplicationListener。
 	public void multicastEvent(ApplicationEvent event) {
 		multicastEvent(event, null);
 	}

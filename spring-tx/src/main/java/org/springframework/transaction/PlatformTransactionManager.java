@@ -44,6 +44,8 @@ import org.springframework.lang.Nullable;
  * @see org.springframework.transaction.ReactiveTransactionManager
  * @see ConfigurableTransactionManager
  */
+// 学习注释（源码阅读）：事务管理器核心接口。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface PlatformTransactionManager extends TransactionManager {
 
 	/**

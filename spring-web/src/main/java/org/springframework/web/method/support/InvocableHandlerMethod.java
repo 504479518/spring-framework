@@ -60,6 +60,8 @@ import org.springframework.web.method.HandlerMethod;
  * @author Sebastien Deleuze
  * @since 3.1
  */
+// 学习注释（源码阅读）：封装 Controller 方法调用和参数解析。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class InvocableHandlerMethod extends HandlerMethod {
 
 	private static final Object[] EMPTY_ARGS = new Object[0];
@@ -175,6 +177,7 @@ public class InvocableHandlerMethod extends HandlerMethod {
 	 * @see #doInvoke
 	 */
 	@Nullable
+	// 学习注释：Controller 方法反射调用入口：先解析参数，再调用目标方法。
 	public Object invokeForRequest(NativeWebRequest request, @Nullable ModelAndViewContainer mavContainer,
 			Object... providedArgs) throws Exception {
 
@@ -204,6 +207,7 @@ public class InvocableHandlerMethod extends HandlerMethod {
 	 * <p>The resulting array will be passed into {@link #doInvoke}.
 	 * @since 5.1.2
 	 */
+	// 学习注释：逐个解析 Controller 方法参数的入口。
 	protected Object[] getMethodArgumentValues(NativeWebRequest request, @Nullable ModelAndViewContainer mavContainer,
 			Object... providedArgs) throws Exception {
 

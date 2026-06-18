@@ -36,6 +36,8 @@ import org.springframework.lang.Nullable;
  * @see TransactionAttributeEditor
  */
 @SuppressWarnings("serial")
+// 学习注释（源码阅读）：基于规则的回滚判断属性。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class RuleBasedTransactionAttribute extends DefaultTransactionAttribute implements Serializable {
 
 	/** Prefix for rollback-on-exception rules in description strings. */

@@ -39,6 +39,8 @@ import org.springframework.util.Assert;
  * @see DataSourceTransactionManager
  * @see DataSourceUtils
  */
+// 学习注释（源码阅读）：事务同步中绑定到线程的数据源连接持有者。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class ConnectionHolder extends ResourceHolderSupport {
 
 	/**

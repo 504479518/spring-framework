@@ -41,6 +41,8 @@ import org.springframework.lang.Nullable;
  * @see org.springframework.transaction.support.DefaultTransactionDefinition
  * @see org.springframework.transaction.interceptor.TransactionAttribute
  */
+// 学习注释（源码阅读）：事务属性定义，如传播行为、隔离级别、超时、只读。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface TransactionDefinition {
 
 	/**

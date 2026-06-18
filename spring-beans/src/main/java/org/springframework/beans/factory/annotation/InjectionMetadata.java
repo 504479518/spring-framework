@@ -45,6 +45,8 @@ import org.springframework.util.ReflectionUtils;
  * @author Juergen Hoeller
  * @since 2.5
  */
+// 学习注释（源码阅读）：注入元数据模型，保存需要注入的字段和方法，并负责执行反射注入。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class InjectionMetadata {
 
 	/**

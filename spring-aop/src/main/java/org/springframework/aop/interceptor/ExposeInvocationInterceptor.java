@@ -42,6 +42,8 @@ import org.springframework.lang.Nullable;
  * @author Juergen Hoeller
  */
 @SuppressWarnings("serial")
+// 学习注释（源码阅读）：把当前 MethodInvocation 暴露到 ThreadLocal。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public final class ExposeInvocationInterceptor implements MethodInterceptor, PriorityOrdered, Serializable {
 
 	/** Singleton instance of this class. */

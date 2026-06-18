@@ -47,6 +47,8 @@ import org.springframework.util.Assert;
  * @since 3.0
  * @see AnnotationConfigApplicationContext#register
  */
+// 学习注释（源码阅读）：手动注册注解类的入口，常见于 AnnotationConfigApplicationContext.register()。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class AnnotatedBeanDefinitionReader {
 
 	private final BeanDefinitionRegistry registry;

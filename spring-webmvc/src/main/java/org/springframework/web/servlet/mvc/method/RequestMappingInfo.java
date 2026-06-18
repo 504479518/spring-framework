@@ -63,6 +63,8 @@ import org.springframework.web.util.pattern.PathPatternParser;
  * @author Rossen Stoyanchev
  * @since 3.1
  */
+// 学习注释（源码阅读）：请求映射条件组合模型。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public final class RequestMappingInfo implements RequestCondition<RequestMappingInfo> {
 
 	private static final PathPatternsRequestCondition EMPTY_PATH_PATTERNS = new PathPatternsRequestCondition();

@@ -78,6 +78,8 @@ import org.springframework.web.util.UrlPathHelper;
  * @author Sebastien Deleuze
  * @since 3.1
  */
+// 学习注释（源码阅读）：基于 HttpMessageConverter 读写请求体和响应体的基类。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public abstract class AbstractMessageConverterMethodProcessor extends AbstractMessageConverterMethodArgumentResolver
 		implements HandlerMethodReturnValueHandler {
 

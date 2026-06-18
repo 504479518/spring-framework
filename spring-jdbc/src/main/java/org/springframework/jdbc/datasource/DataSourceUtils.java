@@ -51,6 +51,8 @@ import org.springframework.util.Assert;
  * @see org.springframework.transaction.jta.JtaTransactionManager
  * @see org.springframework.transaction.support.TransactionSynchronizationManager
  */
+// 学习注释（源码阅读）：JDBC Connection 获取工具，会优先使用事务绑定连接。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public abstract class DataSourceUtils {
 
 	/**
@@ -76,6 +78,7 @@ public abstract class DataSourceUtils {
 	 * @see #releaseConnection(Connection, DataSource)
 	 * @see #isConnectionTransactional(Connection, DataSource)
 	 */
+	// 学习注释：获取 JDBC Connection 的统一入口：有事务时优先返回线程绑定连接。
 	public static Connection getConnection(DataSource dataSource) throws CannotGetJdbcConnectionException {
 		try {
 			return doGetConnection(dataSource);

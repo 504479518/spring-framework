@@ -162,6 +162,8 @@ import org.springframework.web.util.WebUtils;
  * @see org.springframework.web.context.ContextLoaderListener
  */
 @SuppressWarnings("serial")
+// 学习注释（源码阅读）：Spring MVC 前端控制器，HTTP 请求分发主入口。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class DispatcherServlet extends FrameworkServlet {
 
 	/** Well-known name for the MultipartResolver object in the bean factory for this namespace. */
@@ -1045,7 +1047,15 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * @param response current HTTP response
 	 * @throws Exception in case of any kind of processing failure
 	 */
-	@SuppressWarnings("deprecation")
+	// 学习注释：Spring MVC 请求分发主流程：找 Handler、找 Adapter、执行拦截器、调用 Controller、处理结果。
+	// 整体流程：
+	//   1. checkMultipart() → 检查文件上传请求
+	//   2. getHandler()     → 遍历 HandlerMapping 找到 Controller 方法
+	//   3. getHandlerAdapter() → 找到支持该 Handler 的 Adapter
+	//   4. applyPreHandle()  → 执行拦截器前置逻辑
+	//   5. ha.handle()       → 调用 Controller 方法（参数解析 + 返回值处理）
+	//   6. applyPostHandle() → 执行拦截器后置逻辑
+	//   7. processDispatchResult() → 渲染视图或处理异常
 	protected void doDispatch(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		HttpServletRequest processedRequest = request;
 		HandlerExecutionChain mappedHandler = null;
@@ -1058,20 +1068,25 @@ public class DispatcherServlet extends FrameworkServlet {
 			Exception dispatchException = null;
 
 			try {
+				// 学习注释：第 1 步——检查是否是文件上传（multipart）请求
 				processedRequest = checkMultipart(request);
 				multipartRequestParsed = (processedRequest != request);
 
-				// Determine handler for the current request.
+				// 学习注释：第 2 步——根据 URL 找到 HandlerExecutionChain（Controller + 拦截器链）
+				// 内部遍历所有 HandlerMapping（RequestMappingHandlerMapping 等）
+				// 匹配 @RequestMapping 注解定义的 URL 映射
 				mappedHandler = getHandler(processedRequest);
 				if (mappedHandler == null) {
+					// 找不到 Handler → 返回 404
 					noHandlerFound(processedRequest, response);
 					return;
 				}
 
-				// Determine handler adapter for the current request.
+				// 学习注释：第 3 步——找到支持该 Handler 的 HandlerAdapter
+				// 对 @Controller 方法来说，通常是 RequestMappingHandlerAdapter
 				HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
 
-				// Process last-modified header, if supported by the handler.
+				// 学习注释：处理 Last-Modified 缓存（GET 请求可能直接返回 304）
 				String method = request.getMethod();
 				boolean isGet = HttpMethod.GET.matches(method);
 				if (isGet || HttpMethod.HEAD.matches(method)) {
@@ -1081,28 +1096,39 @@ public class DispatcherServlet extends FrameworkServlet {
 					}
 				}
 
+				// 学习注释：第 4 步——执行拦截器前置逻辑 preHandle()
+				// 如果任一拦截器返回 false，请求被拦截，不再往下走
 				if (!mappedHandler.applyPreHandle(processedRequest, response)) {
 					return;
 				}
 
-				// Actually invoke the handler.
+				// 学习注释：第 5 步——调用 Controller 方法！！！
+				// 这里是核心：RequestMappingHandlerAdapter.handle() 内部执行：
+				//   - 参数解析（@RequestParam、@RequestBody、@PathVariable 等）
+				//   - 反射调用你的 Controller 方法
+				//   - 返回值处理（@ResponseBody 用 HttpMessageConverter 序列化为 JSON）
 				mv = ha.handle(processedRequest, response, mappedHandler.getHandler());
 
+				// 异步请求开始，直接返回不做后续处理
 				if (asyncManager.isConcurrentHandlingStarted()) {
 					return;
 				}
 
+				// 如果没有指定视图名，使用默认的视图名翻译器
 				applyDefaultViewName(processedRequest, mv);
+				// 学习注释：第 6 步——执行拦截器后置逻辑 postHandle()
 				mappedHandler.applyPostHandle(processedRequest, response, mv);
 			}
 			catch (Exception ex) {
 				dispatchException = ex;
 			}
 			catch (Throwable err) {
-				// As of 4.3, we're processing Errors thrown from handler methods as well,
-				// making them available for @ExceptionHandler methods and other scenarios.
 				dispatchException = new ServletException("Handler dispatch failed: " + err, err);
 			}
+			// 学习注释：第 7 步——处理结果：渲染视图 or 处理异常
+			// 如果 dispatchException 不为 null，会走异常解析器（@ExceptionHandler）
+			// 如果 mv 不为 null，会渲染视图（JSP/Thymeleaf 等）
+			// 如果 @ResponseBody 已直接写入 response，mv 为 null，跳过渲染
 			processDispatchResult(processedRequest, response, mappedHandler, mv, dispatchException);
 		}
 		catch (Exception ex) {
@@ -1114,14 +1140,14 @@ public class DispatcherServlet extends FrameworkServlet {
 		}
 		finally {
 			if (asyncManager.isConcurrentHandlingStarted()) {
-				// Instead of postHandle and afterCompletion
 				if (mappedHandler != null) {
+					// 学习注释：异步请求走这个分支，执行异步拦截器回调
 					mappedHandler.applyAfterConcurrentHandlingStarted(processedRequest, response);
 				}
 				asyncManager.setMultipartRequestParsed(multipartRequestParsed);
 			}
 			else {
-				// Clean up any resources used by a multipart request.
+				// 学习注释：同步请求，清理 multipart 资源（临时上传文件等）
 				if (multipartRequestParsed || asyncManager.isMultipartRequestParsed()) {
 					cleanupMultipart(processedRequest);
 				}
@@ -1278,6 +1304,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * @return the HandlerExecutionChain, or {@code null} if no handler could be found
 	 */
 	@Nullable
+	// 学习注释：根据请求查找 HandlerExecutionChain，内部遍历所有 HandlerMapping。
 	protected HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception {
 		if (this.handlerMappings != null) {
 			for (HandlerMapping mapping : this.handlerMappings) {
@@ -1314,6 +1341,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * @param handler the handler object to find an adapter for
 	 * @throws ServletException if no HandlerAdapter can be found for the handler. This is a fatal error.
 	 */
+	// 学习注释：根据 Handler 类型选择支持它的 HandlerAdapter。
 	protected HandlerAdapter getHandlerAdapter(Object handler) throws ServletException {
 		if (this.handlerAdapters != null) {
 			for (HandlerAdapter adapter : this.handlerAdapters) {
@@ -1337,6 +1365,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	 * @throws Exception if no error ModelAndView found
 	 */
 	@Nullable
+	// 学习注释：MVC 异常处理入口：遍历 HandlerExceptionResolver 尝试生成错误结果。
 	protected ModelAndView processHandlerException(HttpServletRequest request, HttpServletResponse response,
 			@Nullable Object handler, Exception ex) throws Exception {
 

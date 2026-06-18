@@ -33,6 +33,8 @@ import org.springframework.util.ClassUtils;
  * @since 14.03.2003
  */
 @SuppressWarnings("serial")
+// 学习注释（源码阅读）：代理工厂，持有 Advisor 并委托 AopProxy 创建代理。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class ProxyFactory extends ProxyCreatorSupport {
 
 	/**

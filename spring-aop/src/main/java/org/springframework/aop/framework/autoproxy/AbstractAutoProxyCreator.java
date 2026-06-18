@@ -94,6 +94,8 @@ import org.springframework.util.StringUtils;
  * @see DefaultAdvisorAutoProxyCreator
  */
 @SuppressWarnings("serial")
+// 学习注释（源码阅读）：AOP 自动代理创建入口，重点看 wrapIfNecessary()。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 		implements SmartInstantiationAwareBeanPostProcessor, BeanFactoryAware {
 
@@ -262,8 +264,12 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	}
 
 	@Override
+	// 学习注释：循环依赖时提前创建代理的入口。
+	// 当 A 依赖 B，B 依赖 A 时，三级缓存的 ObjectFactory 会调用这个方法。
+	// 如果 A 需要被 AOP 代理，就在此时提前创建代理（而不是等到 postProcessAfterInitialization）。
 	public Object getEarlyBeanReference(Object bean, String beanName) {
 		Object cacheKey = getCacheKey(bean.getClass(), beanName);
+		// 记录已经通过早期引用处理过，避免 postProcessAfterInitialization 重复代理
 		this.earlyBeanReferences.put(cacheKey, bean);
 		return wrapIfNecessary(bean, beanName, cacheKey);
 	}
@@ -312,10 +318,16 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 */
 	@Override
 	@Nullable
+	// 学习注释：AOP 代理的正常创建时机——在 Bean 初始化完成后。
+	// initializeBean() 的最后一步会遍历所有 BeanPostProcessor 并调用这个方法。
+	// 如果已经通过 getEarlyBeanReference 提前代理了，这里会跳过。
 	public Object postProcessAfterInitialization(@Nullable Object bean, String beanName) {
 		if (bean != null) {
 			Object cacheKey = getCacheKey(bean.getClass(), beanName);
+			// 检查是否已经通过早期引用处理过（循环依赖场景）
+			// 如果 earlyBeanReferences 中的值 == bean，说明已经处理过，直接跳过
 			if (this.earlyBeanReferences.remove(cacheKey) != bean) {
+				// 未通过早期引用处理过 → 正常判断是否需要代理
 				return wrapIfNecessary(bean, beanName, cacheKey);
 			}
 		}
@@ -351,28 +363,44 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 * @param cacheKey the cache key for metadata access
 	 * @return a proxy wrapping the bean, or the raw bean instance as-is
 	 */
+	// 学习注释：AOP 自动代理的核心判断入口：决定当前 Bean 是否需要创建代理。
+	// 判断逻辑：
+	//   1. 排除已处理的 Bean（targetSourcedBeans、advisedBeans 缓存）
+	//   2. 排除基础设施类（Advice、Advisor、AopInfrastructureBean 等）
+	//   3. 查找匹配的 Advisor（通过 Pointcut 匹配 Bean 的方法）
+	//   4. 如果有匹配的 Advisor → 创建代理对象
 	protected Object wrapIfNecessary(Object bean, String beanName, Object cacheKey) {
+		// 已通过自定义 TargetSource 处理过 → 跳过
 		if (StringUtils.hasLength(beanName) && this.targetSourcedBeans.contains(beanName)) {
 			return bean;
 		}
+		// 之前已经判断过不需要代理 → 跳过
 		if (Boolean.FALSE.equals(this.advisedBeans.get(cacheKey))) {
 			return bean;
 		}
+		// 基础设施类（Advisor、Advice 等）不应该被代理 → 跳过
 		if (isInfrastructureClass(bean.getClass()) || shouldSkip(bean.getClass(), beanName)) {
 			this.advisedBeans.put(cacheKey, Boolean.FALSE);
 			return bean;
 		}
 
-		// Create proxy if we have advice.
+		// 学习注释：核心——查找匹配当前 Bean 的所有 Advisor
+		// 子类实现（AnnotationAwareAspectJAutoProxyCreator）会解析所有 @Aspect 类，
+		// 通过 Pointcut 匹配 Bean 的方法，返回匹配的 Advisor 列表。
 		Object[] specificInterceptors = getAdvicesAndAdvisorsForBean(bean.getClass(), beanName, null);
 		if (specificInterceptors != DO_NOT_PROXY) {
+			// 有匹配的 Advisor → 创建代理！
 			this.advisedBeans.put(cacheKey, Boolean.TRUE);
+			// 学习注释：创建代理对象（JDK 动态代理或 CGLIB）
+			// 内部经过 ProxyFactory → AopProxy → 生成代理类
 			Object proxy = createProxy(
 					bean.getClass(), beanName, specificInterceptors, new SingletonTargetSource(bean));
 			this.proxyTypes.put(cacheKey, proxy.getClass());
+			// 返回代理对象（替换原始 Bean）
 			return proxy;
 		}
 
+		// 没有匹配的 Advisor → 不代理，缓存结果避免下次重复判断
 		this.advisedBeans.put(cacheKey, Boolean.FALSE);
 		return bean;
 	}
@@ -459,6 +487,7 @@ public abstract class AbstractAutoProxyCreator extends ProxyProcessorSupport
 	 * @return the AOP proxy for the bean
 	 * @see #buildAdvisors
 	 */
+	// 学习注释：真正创建代理对象的入口：把目标类、Advisor、TargetSource 交给 ProxyFactory。
 	protected Object createProxy(Class<?> beanClass, @Nullable String beanName,
 			@Nullable Object[] specificInterceptors, TargetSource targetSource) {
 

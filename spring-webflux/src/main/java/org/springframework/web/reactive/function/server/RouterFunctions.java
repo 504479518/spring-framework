@@ -62,6 +62,8 @@ import org.springframework.web.util.pattern.PathPatternParser;
  * @author Sebastien Deleuze
  * @since 5.0
  */
+// 学习注释（源码阅读）：函数式路由工具和组合入口。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public abstract class RouterFunctions {
 
 	private static final Log logger = LogFactory.getLog(RouterFunctions.class);

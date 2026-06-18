@@ -32,6 +32,8 @@ import org.springframework.web.context.request.NativeWebRequest;
  * @author Rossen Stoyanchev
  * @since 3.1
  */
+// 学习注释（源码阅读）：返回值处理器组合。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class HandlerMethodReturnValueHandlerComposite implements HandlerMethodReturnValueHandler {
 
 	private final List<HandlerMethodReturnValueHandler> returnValueHandlers = new ArrayList<>();
@@ -68,6 +70,7 @@ public class HandlerMethodReturnValueHandlerComposite implements HandlerMethodRe
 	 * @throws IllegalStateException if no suitable {@link HandlerMethodReturnValueHandler} is found.
 	 */
 	@Override
+	// 学习注释：返回值处理器组合入口：选择支持当前返回类型的 handler 并写出结果。
 	public void handleReturnValue(@Nullable Object returnValue, MethodParameter returnType,
 			ModelAndViewContainer mavContainer, NativeWebRequest webRequest) throws Exception {
 

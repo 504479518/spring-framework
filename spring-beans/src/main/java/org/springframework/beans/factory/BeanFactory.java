@@ -117,6 +117,8 @@ import org.springframework.lang.Nullable;
  * @see DisposableBean#destroy
  * @see org.springframework.beans.factory.support.RootBeanDefinition#getDestroyMethodName
  */
+// 学习注释（源码阅读）：IoC 容器最核心接口，提供 getBean() 等 Bean 获取能力。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface BeanFactory {
 
 	/**

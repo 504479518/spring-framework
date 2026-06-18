@@ -41,6 +41,8 @@ import org.springframework.util.Assert;
  * @since 2.0.2
  * @see AnnotationAwareAspectJAutoProxyCreator
  */
+// 学习注释（源码阅读）：从 BeanFactory 中查找 @Aspect 并构建 Advisor。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class BeanFactoryAspectJAdvisorsBuilder {
 
 	private static final Log logger = LogFactory.getLog(BeanFactoryAspectJAdvisorsBuilder.class);
@@ -86,6 +88,7 @@ public class BeanFactoryAspectJAdvisorsBuilder {
 	 * @see #isEligibleBean
 	 */
 	@SuppressWarnings("NullAway")
+	// 学习注释：从 BeanFactory 中扫描 @Aspect Bean 并构建 Advisor。理解 @Aspect 如何变成 Spring AOP 元数据时重点看。
 	public List<Advisor> buildAspectJAdvisors() {
 		List<String> aspectNames = this.aspectBeanNames;
 

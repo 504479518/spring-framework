@@ -48,6 +48,8 @@ import org.springframework.util.ObjectUtils;
  * @since 2.5
  */
 @SuppressWarnings("serial")
+// 学习注释（源码阅读）：依赖描述对象，封装字段、方法参数、required 等依赖解析上下文。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class DependencyDescriptor extends InjectionPoint implements Serializable {
 
 	private final Class<?> declaringClass;

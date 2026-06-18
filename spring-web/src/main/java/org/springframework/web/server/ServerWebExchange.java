@@ -41,6 +41,8 @@ import org.springframework.util.MultiValueMap;
  * @author Rossen Stoyanchev
  * @since 5.0
  */
+// 学习注释（源码阅读）：WebFlux 请求响应上下文。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface ServerWebExchange {
 
 	/**

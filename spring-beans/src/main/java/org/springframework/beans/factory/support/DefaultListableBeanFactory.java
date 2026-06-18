@@ -127,6 +127,8 @@ import org.springframework.util.StringUtils;
  * @see #resolveDependency
  */
 @SuppressWarnings("serial")
+// 学习注释（源码阅读）：Spring 默认核心 BeanFactory，集 BeanDefinition 注册、Bean 创建、依赖解析于一体。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory
 		implements ConfigurableListableBeanFactory, BeanDefinitionRegistry, Serializable {
 
@@ -1109,6 +1111,10 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
 	@Override
 	public void preInstantiateSingletons() throws BeansException {
+		// 学习注释：
+		// 这是 refresh() 后半段创建非懒加载单例 Bean 的入口。
+		// 它会遍历当前已经注册好的 BeanDefinition 名称，跳过抽象 Bean 和非单例 Bean，
+		// 对符合条件的 Bean 调用 getBean()/createBean 触发完整创建流程。
 		if (logger.isTraceEnabled()) {
 			logger.trace("Pre-instantiating singletons in " + this);
 		}
@@ -1118,6 +1124,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		List<String> beanNames = new ArrayList<>(this.beanDefinitionNames);
 
 		// Trigger initialization of all non-lazy singleton beans...
+		// 学习注释：第一轮遍历负责“创建 Bean”。真正创建时通常会进入
+		// AbstractBeanFactory.doGetBean() 和 AbstractAutowireCapableBeanFactory.doCreateBean()。
 		this.preInstantiationThread.set(PreInstantiation.MAIN);
 		if (this.mainThreadPrefix == null) {
 			this.mainThreadPrefix = getThreadNamePrefix();
@@ -1127,6 +1135,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 			for (String beanName : beanNames) {
 				RootBeanDefinition mbd = getMergedLocalBeanDefinition(beanName);
 				if (!mbd.isAbstract() && mbd.isSingleton()) {
+					// 学习注释：mbd 是合并后的 BeanDefinition。父子 BeanDefinition、默认配置等
+					// 会在这里体现为创建 Bean 时实际使用的元数据。
 					CompletableFuture<?> future = preInstantiateSingleton(beanName, mbd);
 					if (future != null) {
 						futures.add(future);
@@ -1148,6 +1158,8 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		}
 
 		// Trigger post-initialization callback for all applicable beans...
+		// 学习注释：第二轮遍历负责“所有单例创建完成后的回调”。
+		// SmartInitializingSingleton.afterSingletonsInstantiated() 常用于需要等容器单例都就绪后再执行的逻辑。
 		for (String beanName : beanNames) {
 			Object singletonInstance = getSingleton(beanName, false);
 			if (singletonInstance instanceof SmartInitializingSingleton smartSingleton) {

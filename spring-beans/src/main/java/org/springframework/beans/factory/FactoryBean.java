@@ -62,6 +62,8 @@ import org.springframework.lang.Nullable;
  * @see org.springframework.aop.framework.ProxyFactoryBean
  * @see org.springframework.jndi.JndiObjectFactoryBean
  */
+// 学习注释（源码阅读）：特殊 Bean，getBean() 默认返回 getObject() 产物，& 前缀才返回工厂本身。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface FactoryBean<T> {
 
 	/**

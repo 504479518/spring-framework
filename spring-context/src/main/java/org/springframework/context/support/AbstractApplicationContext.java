@@ -138,6 +138,8 @@ import org.springframework.util.ReflectionUtils;
  * @see org.springframework.context.ApplicationListener
  * @see org.springframework.context.MessageSource
  */
+// 学习注释（源码阅读）：ApplicationContext 启动主模板，重点看 refresh() 如何串起 BeanFactory 准备、后置处理器注册和单例 Bean 创建。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public abstract class AbstractApplicationContext extends DefaultResourceLoader
 		implements ConfigurableApplicationContext {
 
@@ -586,6 +588,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 
 	@Override
 	public void refresh() throws BeansException, IllegalStateException {
+		// 学习注释：
+		// refresh() 是 ApplicationContext 启动的主模板方法。读 Spring 容器源码时，
+		// 建议先把这个方法当作总目录：前半段准备 BeanFactory 和各种后置处理器，
+		// 后半段才真正触发非懒加载单例 Bean 的创建。
 		this.startupShutdownLock.lock();
 		try {
 			this.startupShutdownThread = Thread.currentThread();
@@ -593,22 +599,33 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 			StartupStep contextRefresh = this.applicationStartup.start("spring.context.refresh");
 
 			// Prepare this context for refreshing.
+			// 学习注释：准备环境状态，例如 active 标记、Environment 校验、早期事件集合。
+			// 这里还没有创建普通业务 Bean。
 			prepareRefresh();
 
 			// Tell the subclass to refresh the internal bean factory.
+			// 学习注释：获取当前上下文使用的 BeanFactory。对 AnnotationConfigApplicationContext
+			// 来说，通常返回 GenericApplicationContext 中已经创建好的 DefaultListableBeanFactory。
 			ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();
 
 			// Prepare the bean factory for use in this context.
+			// 学习注释：给 BeanFactory 注册 ClassLoader、表达式解析器、Aware 处理器等基础设施。
+			// 这些基础设施会影响后续 Bean 的创建和初始化。
 			prepareBeanFactory(beanFactory);
 
 			try {
 				// Allows post-processing of the bean factory in context subclasses.
+				// 学习注释：留给子类扩展 BeanFactory，例如 Web 容器会在这里注册 Web 相关 scope。
 				postProcessBeanFactory(beanFactory);
 
 				StartupStep beanPostProcess = this.applicationStartup.start("spring.context.beans.post-process");
 				// Invoke factory processors registered as beans in the context.
+				// 学习注释：这里会调用 BeanFactoryPostProcessor。注解配置解析的核心
+				// ConfigurationClassPostProcessor 就是在这一阶段解析 @Configuration、@Bean、@ComponentScan。
 				invokeBeanFactoryPostProcessors(beanFactory);
 				// Register bean processors that intercept bean creation.
+				// 学习注释：这里只是注册 BeanPostProcessor，还不是执行。它们会在后续 Bean
+				// 实例创建、依赖注入、初始化前后被调用，例如 @Autowired 和 AOP 都依赖这一类扩展点。
 				registerBeanPostProcessors(beanFactory);
 				beanPostProcess.end();
 
@@ -625,6 +642,8 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader
 				registerListeners();
 
 				// Instantiate all remaining (non-lazy-init) singletons.
+				// 学习注释：这是普通非懒加载单例 Bean 创建的主要触发点。
+				// 继续往下看会进入 DefaultListableBeanFactory.preInstantiateSingletons()。
 				finishBeanFactoryInitialization(beanFactory);
 
 				// Last step: publish corresponding event.

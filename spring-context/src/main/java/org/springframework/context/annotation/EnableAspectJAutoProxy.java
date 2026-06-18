@@ -120,6 +120,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Import(AspectJAutoProxyRegistrar.class)
+// 学习注释（源码阅读）：开启 AspectJ 自动代理的注解入口。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public @interface EnableAspectJAutoProxy {
 
 	/**

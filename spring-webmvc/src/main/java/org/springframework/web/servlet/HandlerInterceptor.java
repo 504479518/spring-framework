@@ -78,6 +78,8 @@ import org.springframework.web.method.HandlerMethod;
  * @see org.springframework.web.servlet.theme.ThemeChangeInterceptor
  * @see jakarta.servlet.Filter
  */
+// 学习注释（源码阅读）：MVC 拦截器接口。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface HandlerInterceptor {
 
 	/**

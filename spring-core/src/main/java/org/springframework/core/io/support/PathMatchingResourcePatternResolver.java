@@ -213,6 +213,8 @@ import org.springframework.util.StringUtils;
  * @see org.springframework.core.io.ResourceLoader#getResource(String)
  * @see ClassLoader#getResources(String)
  */
+// 学习注释（源码阅读）：classpath* 和通配路径资源解析的核心实现。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class PathMatchingResourcePatternResolver implements ResourcePatternResolver {
 
 	private static final Resource[] EMPTY_RESOURCE_ARRAY = {};
@@ -365,6 +367,7 @@ public class PathMatchingResourcePatternResolver implements ResourcePatternResol
 	}
 
 	@Override
+	// 学习注释：通配资源解析入口：处理 classpath*:、Ant 风格路径等资源查找。
 	public Resource[] getResources(String locationPattern) throws IOException {
 		Assert.notNull(locationPattern, "Location pattern must not be null");
 		if (locationPattern.startsWith(CLASSPATH_ALL_URL_PREFIX)) {

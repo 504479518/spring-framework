@@ -112,6 +112,8 @@ import org.springframework.util.StringValueResolver;
  * @see AbstractAutowireCapableBeanFactory#createBean
  * @see DefaultListableBeanFactory#getBeanDefinition
  */
+// 学习注释（源码阅读）：getBean() 主线所在父类，重点看 doGetBean()。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport implements ConfigurableBeanFactory {
 
 	/** Parent bean factory, for bean inheritance support. */
@@ -243,10 +245,16 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 			String name, @Nullable Class<T> requiredType, @Nullable Object[] args, boolean typeCheckOnly)
 			throws BeansException {
 
+		// 学习注释：
+		// doGetBean() 是 Bean 获取主线。无论是用户调用 getBean()，
+		// 还是容器预实例化、依赖注入触发 Bean 创建，最终都会经过这里。
+		// 阅读时重点看三件事：先查缓存、再处理依赖、最后按 scope 创建或获取 Bean。
 		String beanName = transformedBeanName(name);
 		Object beanInstance;
 
 		// Eagerly check singleton cache for manually registered singletons.
+		// 学习注释：单例 Bean 优先从缓存拿。这里也可能拿到“提前暴露”的早期引用，
+		// 这是解决部分循环依赖的重要入口。
 		Object sharedInstance = getSingleton(beanName);
 		if (sharedInstance != null && args == null) {
 			if (logger.isTraceEnabled()) {
@@ -264,11 +272,14 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		else {
 			// Fail if we're already creating this bean instance:
 			// We're assumably within a circular reference.
+			// 学习注释：prototype 每次都创建新对象，无法像 singleton 那样通过提前暴露引用解决循环依赖。
 			if (isPrototypeCurrentlyInCreation(beanName)) {
 				throw new BeanCurrentlyInCreationException(beanName);
 			}
 
 			// Check if bean definition exists in this factory.
+			// 学习注释：当前 BeanFactory 找不到 BeanDefinition 时，委托父 BeanFactory 查找。
+			// 这就是父子容器中 Bean 查找链路的入口。
 			BeanFactory parentBeanFactory = getParentBeanFactory();
 			if (parentBeanFactory != null && !containsBeanDefinition(beanName)) {
 				// Not found -> check parent.
@@ -303,6 +314,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				checkMergedBeanDefinition(mbd, beanName, args);
 
 				// Guarantee initialization of beans that the current bean depends on.
+				// 学习注释：depends-on 是显式初始化顺序，不等同于 @Autowired 依赖注入。
+				// 这里会先创建 depends-on 指定的 Bean，再创建当前 Bean。
 				String[] dependsOn = mbd.getDependsOn();
 				if (dependsOn != null) {
 					for (String dep : dependsOn) {
@@ -334,6 +347,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 				// Create bean instance.
 				if (mbd.isSingleton()) {
+					// 学习注释：单例创建通过 getSingleton(beanName, ObjectFactory) 统一管理。
+					// ObjectFactory 内部调用 createBean()，异常时会清理可能提前暴露的缓存。
 					sharedInstance = getSingleton(beanName, () -> {
 						try {
 							return createBean(beanName, mbd, args);
@@ -351,6 +366,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 				else if (mbd.isPrototype()) {
 					// It's a prototype -> create a new instance.
+					// 学习注释：prototype 不进单例缓存，每次请求都重新 createBean()。
 					Object prototypeInstance = null;
 					try {
 						beforePrototypeCreation(beanName);

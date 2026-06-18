@@ -37,6 +37,8 @@ import java.io.Flushable;
  * @see org.springframework.transaction.support.TransactionCallback#doInTransaction
  * @see org.springframework.transaction.interceptor.TransactionInterceptor#currentTransactionStatus()
  */
+// 学习注释（源码阅读）：事务运行状态。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface TransactionStatus extends TransactionExecution, SavepointManager, Flushable {
 
 	/**

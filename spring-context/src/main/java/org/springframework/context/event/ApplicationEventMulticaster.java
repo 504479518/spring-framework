@@ -36,6 +36,8 @@ import org.springframework.lang.Nullable;
  * @author Stephane Nicoll
  * @see ApplicationListener
  */
+// 学习注释（源码阅读）：事件广播器接口，负责把事件分发给监听器。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface ApplicationEventMulticaster {
 
 	/**

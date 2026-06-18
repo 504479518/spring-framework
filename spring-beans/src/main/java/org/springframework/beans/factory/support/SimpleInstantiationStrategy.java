@@ -41,6 +41,8 @@ import org.springframework.util.StringUtils;
  * @author Stephane Nicoll
  * @since 1.1
  */
+// 学习注释（源码阅读）：基础实例化策略，通常通过构造器或工厂方法创建对象。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class SimpleInstantiationStrategy implements InstantiationStrategy {
 
 	private static final ThreadLocal<Method> currentlyInvokedFactoryMethod = new ThreadLocal<>();

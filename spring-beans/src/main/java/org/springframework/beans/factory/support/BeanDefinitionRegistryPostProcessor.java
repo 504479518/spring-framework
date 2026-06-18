@@ -31,6 +31,8 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
  * @since 3.0.1
  * @see org.springframework.context.annotation.ConfigurationClassPostProcessor
  */
+// 学习注释（源码阅读）：BeanDefinitionRegistry 级扩展点，可新增或修改 BeanDefinition。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface BeanDefinitionRegistryPostProcessor extends BeanFactoryPostProcessor {
 
 	/**

@@ -27,6 +27,8 @@ import org.springframework.beans.BeansException;
  * @author Juergen Hoeller
  * @since 1.0.1
  */
+// 学习注释（源码阅读）：销毁阶段扩展点，用于 Bean 销毁前回调。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface DestructionAwareBeanPostProcessor extends BeanPostProcessor {
 
 	/**

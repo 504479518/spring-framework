@@ -45,6 +45,8 @@ import org.springframework.util.ClassUtils;
  * @see AdvisedSupport#setProxyTargetClass
  * @see AdvisedSupport#setInterfaces
  */
+// 学习注释（源码阅读）：选择 JDK 动态代理或 CGLIB 代理的策略。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class DefaultAopProxyFactory implements AopProxyFactory, Serializable {
 
 	/**
@@ -57,6 +59,7 @@ public class DefaultAopProxyFactory implements AopProxyFactory, Serializable {
 
 
 	@Override
+	// 学习注释：代理类型选择入口：在 JDK 动态代理和 CGLIB 代理之间做决策。
 	public AopProxy createAopProxy(AdvisedSupport config) throws AopConfigException {
 		if (config.isOptimize() || config.isProxyTargetClass() || !config.hasUserSuppliedInterfaces()) {
 			Class<?> targetClass = config.getTargetClass();

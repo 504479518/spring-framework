@@ -59,6 +59,8 @@ import org.springframework.lang.Nullable;
  * @see #setUserAttribute
  * @see #getUserAttribute
  */
+// 学习注释（源码阅读）：AOP 拦截器链执行核心，重点看 proceed()。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Cloneable {
 
 	protected final Object proxy;
@@ -155,32 +157,47 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 	}
 
 
-	@Override
-	@Nullable
+	// 学习注释：AOP 拦截器链执行核心：每次 proceed() 推进一个拦截器，最后才调用目标方法。
+	// 这是一个递归结构，假设有 3 个拦截器 [Around, Before, AfterReturning]：
+	//   proceed() → Around.invoke(this)
+	//     → proceed() → Before.invoke(this)      ← Before 先执行前置逻辑
+	//       → proceed() → invokeJoinpoint()       ← 所有拦截器走完，反射调用目标方法
+	//       ← 返回结果
+	//     ← Before 返回
+	//   ← Around 执行后置逻辑，返回
 	public Object proceed() throws Throwable {
-		// We start with an index of -1 and increment early.
+		// currentInterceptorIndex 从 -1 开始，每次 ++currentInterceptorIndex
+		// 当 index 等于拦截器列表最后一个元素下标时，说明全部执行完了
 		if (this.currentInterceptorIndex == this.interceptorsAndDynamicMethodMatchers.size() - 1) {
+			// 所有拦截器执行完毕！反射调用目标方法
+			// invokeJoinpoint() 内部就是 method.invoke(target, args)
 			return invokeJoinpoint();
 		}
 
+		// 取出下一个拦截器（index 先 +1 再取）
 		Object interceptorOrInterceptionAdvice =
 				this.interceptorsAndDynamicMethodMatchers.get(++this.currentInterceptorIndex);
 		if (interceptorOrInterceptionAdvice instanceof InterceptorAndDynamicMethodMatcher dm) {
-			// Evaluate dynamic method matcher here: static part will already have
-			// been evaluated and found to match.
+			// 动态匹配器：运行时根据方法参数判断是否匹配 Pointcut
 			Class<?> targetClass = (this.targetClass != null ? this.targetClass : this.method.getDeclaringClass());
 			if (dm.matcher().matches(this.method, targetClass, this.arguments)) {
+				// 参数匹配 → 执行拦截器（拦截器内部会再调 proceed() 形成递归）
 				return dm.interceptor().invoke(this);
 			}
 			else {
-				// Dynamic matching failed.
-				// Skip this interceptor and invoke the next in the chain.
+				// 参数不匹配 → 跳过当前拦截器，继续下一个
 				return proceed();
 			}
 		}
 		else {
-			// It's an interceptor, so we just invoke it: The pointcut will have
-			// been evaluated statically before this object was constructed.
+			// 静态拦截器（大多数情况），直接执行。
+			// 典型拦截器的内部结构：
+			//   @Before → MethodBeforeAdviceInterceptor：
+			//     advice.before(); return mi.proceed();
+			//   @After → AspectJAfterAdvice：
+			//     try { return mi.proceed(); } finally { invokeAdviceMethod(); }
+			//   @Around → 用户自定义：
+			//     前置逻辑; Object result = pjp.proceed(); 后置逻辑; return result;
 			return ((MethodInterceptor) interceptorOrInterceptionAdvice).invoke(this);
 		}
 	}

@@ -36,6 +36,8 @@ import org.springframework.util.Assert;
  * @see ThrowsAdviceInterceptor
  */
 @SuppressWarnings("serial")
+// 学习注释（源码阅读）：前置通知适配成 MethodInterceptor 的实现。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class MethodBeforeAdviceInterceptor implements MethodInterceptor, BeforeAdvice, Serializable {
 
 	private final MethodBeforeAdvice advice;

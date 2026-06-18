@@ -71,6 +71,8 @@ import org.springframework.util.StringUtils;
  * @since 3.0
  * @see ConfigurationClassParser
  */
+// 学习注释（源码阅读）：配置类读取结果落地器，负责把解析出的 ConfigurationClass 模型注册为 BeanDefinition。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 class ConfigurationClassBeanDefinitionReader {
 
 	private static final Log logger = LogFactory.getLog(ConfigurationClassBeanDefinitionReader.class);

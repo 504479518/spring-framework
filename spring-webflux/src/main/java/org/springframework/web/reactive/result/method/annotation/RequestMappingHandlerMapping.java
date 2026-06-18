@@ -65,6 +65,8 @@ import org.springframework.web.service.annotation.HttpExchange;
  * @author Olga Maciaszek-Sharma
  * @since 5.0
  */
+// 学习注释（源码阅读）：解析 @RequestMapping 并完成 MVC 路由匹配。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class RequestMappingHandlerMapping extends RequestMappingInfoHandlerMapping
 		implements EmbeddedValueResolverAware {
 

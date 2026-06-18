@@ -67,6 +67,8 @@ import org.springframework.util.ClassUtils;
  * @see AdvisedSupport
  * @see ProxyFactory
  */
+// 学习注释（源码阅读）：JDK 动态代理实现，重点看 invoke() 如何进入 AOP 拦截器链。
+// 建议结合“源码阅读”目录中的 AOP 章节和断点步骤阅读，不要孤立地逐行硬读。
 final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializable {
 
 	/** use serialVersionUID from Spring 1.2 for interoperability. */
@@ -164,6 +166,7 @@ final class JdkDynamicAopProxy implements AopProxy, InvocationHandler, Serializa
 	 */
 	@Override
 	@Nullable
+	// 学习注释：JDK 动态代理的调用入口：代理方法被调用后先进入这里，再组装并执行拦截器链。
 	public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 		Object oldProxy = null;
 		boolean setProxyContext = false;

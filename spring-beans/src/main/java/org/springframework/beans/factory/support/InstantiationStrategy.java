@@ -33,6 +33,8 @@ import org.springframework.lang.Nullable;
  * @author Juergen Hoeller
  * @since 1.1
  */
+// 学习注释（源码阅读）：Bean 实例化策略接口，决定用反射还是 CGLIB 等方式创建对象。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface InstantiationStrategy {
 
 	/**

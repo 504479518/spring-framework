@@ -100,6 +100,8 @@ import org.springframework.util.Assert;
  * @see #refresh()
  * @see org.springframework.beans.factory.xml.XmlBeanDefinitionReader
  */
+// 学习注释（源码阅读）：通用 ApplicationContext 实现，内部持有 DefaultListableBeanFactory，是注解容器的 BeanFactory 来源。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class GenericApplicationContext extends AbstractApplicationContext implements BeanDefinitionRegistry {
 
 	private final DefaultListableBeanFactory beanFactory;

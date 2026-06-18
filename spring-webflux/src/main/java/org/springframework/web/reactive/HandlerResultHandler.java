@@ -27,6 +27,8 @@ import org.springframework.web.server.ServerWebExchange;
  * @author Sebastien Deleuze
  * @since 5.0
  */
+// 学习注释（源码阅读）：WebFlux 处理器返回结果处理器接口。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface HandlerResultHandler {
 
 	/**

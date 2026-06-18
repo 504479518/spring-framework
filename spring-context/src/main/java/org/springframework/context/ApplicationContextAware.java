@@ -56,6 +56,8 @@ import org.springframework.beans.factory.Aware;
  * @see org.springframework.context.support.ApplicationObjectSupport
  * @see org.springframework.beans.factory.BeanFactoryAware
  */
+// 学习注释（源码阅读）：Aware 回调接口，让 Bean 获取所属 ApplicationContext。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface ApplicationContextAware extends Aware {
 
 	/**

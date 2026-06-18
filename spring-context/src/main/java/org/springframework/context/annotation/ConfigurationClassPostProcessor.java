@@ -127,6 +127,8 @@ import org.springframework.util.CollectionUtils;
  * @author Sam Brannen
  * @since 3.0
  */
+// 学习注释（源码阅读）：注解配置解析总入口，把 @Configuration、@ComponentScan、@Import、@Bean 转换为 BeanDefinition。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPostProcessor,
 		BeanRegistrationAotProcessor, BeanFactoryInitializationAotProcessor, PriorityOrdered,
 		ResourceLoaderAware, ApplicationStartupAware, BeanClassLoaderAware, EnvironmentAware {
@@ -361,6 +363,10 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 	 * {@link Configuration} classes.
 	 */
 	public void processConfigBeanDefinitions(BeanDefinitionRegistry registry) {
+		// 学习注释：
+		// 这个方法是注解配置解析的核心入口。它并不直接创建 Bean 实例，
+		// 而是扫描当前 BeanDefinition 注册表，找出配置类候选，
+		// 再把 @Configuration、@ComponentScan、@Import、@Bean 等信息解析成更多 BeanDefinition。
 		List<BeanDefinitionHolder> configCandidates = new ArrayList<>();
 		String[] candidateNames = registry.getBeanDefinitionNames();
 
@@ -372,6 +378,8 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 				}
 			}
 			else if (ConfigurationClassUtils.checkConfigurationClassCandidate(beanDef, this.metadataReaderFactory)) {
+				// 学习注释：候选配置类包括 full 配置类（典型 @Configuration）和 lite 配置类
+				//（例如带 @Component、@Import、@Bean 方法的类）。这里只是筛选候选，不做实例化。
 				configCandidates.add(new BeanDefinitionHolder(beanDef, beanName));
 			}
 		}
@@ -407,6 +415,8 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 		}
 
 		// Parse each @Configuration class
+		// 学习注释：Parser 负责“读懂配置类”，例如解析 @ComponentScan 扫描路径、
+		// @Import 导入类、@Bean 方法等，形成 ConfigurationClass 模型。
 		ConfigurationClassParser parser = new ConfigurationClassParser(
 				this.metadataReaderFactory, this.problemReporter, this.environment,
 				this.resourceLoader, this.componentScanBeanNameGenerator, registry);
@@ -422,6 +432,8 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 			configClasses.removeAll(alreadyParsed);
 
 			// Read the model and create bean definitions based on its content
+			// 学习注释：Reader 负责把 Parser 解析出的 ConfigurationClass 模型落地为 BeanDefinition。
+			// 例如 @Bean 方法会在这里注册为 BeanDefinition，后续 getBean() 才会根据它创建实例。
 			if (this.reader == null) {
 				this.reader = new ConfigurationClassBeanDefinitionReader(
 						registry, this.sourceExtractor, this.resourceLoader, this.environment,
@@ -433,6 +445,8 @@ public class ConfigurationClassPostProcessor implements BeanDefinitionRegistryPo
 
 			candidates.clear();
 			if (registry.getBeanDefinitionCount() > candidateNames.length) {
+				// 学习注释：解析配置类可能会注册新的配置类候选，例如 @Import 或扫描出来的配置类。
+				// 因此这里会循环处理新增候选，直到没有新的配置类需要解析。
 				String[] newCandidateNames = registry.getBeanDefinitionNames();
 				Set<String> oldCandidateNames = Set.of(candidateNames);
 				Set<String> alreadyParsedClasses = CollectionUtils.newHashSet(alreadyParsed.size());

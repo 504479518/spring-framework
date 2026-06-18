@@ -43,6 +43,8 @@ import org.springframework.util.StringUtils;
  * @see Ejb3TransactionAnnotationParser
  */
 @SuppressWarnings("serial")
+// 学习注释（源码阅读）：Spring @Transactional 注解解析器。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class SpringTransactionAnnotationParser implements TransactionAnnotationParser, Serializable {
 
 	@Override

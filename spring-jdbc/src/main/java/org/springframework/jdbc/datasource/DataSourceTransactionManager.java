@@ -118,6 +118,8 @@ import org.springframework.util.Assert;
  * @see org.springframework.jdbc.support.JdbcTransactionManager
  */
 @SuppressWarnings("serial")
+// 学习注释（源码阅读）：基于 JDBC DataSource 的事务管理器。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class DataSourceTransactionManager extends AbstractPlatformTransactionManager
 		implements ResourceTransactionManager, InitializingBean {
 
@@ -245,6 +247,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 	}
 
 	@Override
+	// 学习注释：获取当前数据源事务对象，重点看是否已有线程绑定的 ConnectionHolder。
 	protected Object doGetTransaction() {
 		DataSourceTransactionObject txObject = new DataSourceTransactionObject();
 		txObject.setSavepointAllowed(isNestedTransactionAllowed());
@@ -261,6 +264,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 	}
 
 	@Override
+	// 学习注释：JDBC 事务开启入口：获取 Connection、设置隔离级别/只读/autoCommit，并绑定到线程。
 	protected void doBegin(Object transaction, TransactionDefinition definition) {
 		DataSourceTransactionObject txObject = (DataSourceTransactionObject) transaction;
 		Connection con = null;
@@ -334,6 +338,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 	}
 
 	@Override
+	// 学习注释：JDBC 事务提交入口，最终调用 Connection.commit()。
 	protected void doCommit(DefaultTransactionStatus status) {
 		DataSourceTransactionObject txObject = (DataSourceTransactionObject) status.getTransaction();
 		Connection con = txObject.getConnectionHolder().getConnection();
@@ -349,6 +354,7 @@ public class DataSourceTransactionManager extends AbstractPlatformTransactionMan
 	}
 
 	@Override
+	// 学习注释：JDBC 事务回滚入口，最终调用 Connection.rollback()。
 	protected void doRollback(DefaultTransactionStatus status) {
 		DataSourceTransactionObject txObject = (DataSourceTransactionObject) status.getTransaction();
 		Connection con = txObject.getConnectionHolder().getConnection();

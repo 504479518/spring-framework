@@ -128,6 +128,8 @@ import org.springframework.web.util.WebUtils;
  * @see HandlerMethodArgumentResolver
  * @see HandlerMethodReturnValueHandler
  */
+// 学习注释（源码阅读）：调用 @RequestMapping 方法的 MVC 适配器。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 		implements BeanFactoryAware, InitializingBean {
 
@@ -938,6 +940,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 	 */
 	@SuppressWarnings("deprecation")
 	@Nullable
+	// 学习注释：调用 @RequestMapping Controller 方法的核心入口：会准备参数解析器、返回值处理器并执行方法。
 	protected ModelAndView invokeHandlerMethod(HttpServletRequest request,
 			HttpServletResponse response, HandlerMethod handlerMethod) throws Exception {
 

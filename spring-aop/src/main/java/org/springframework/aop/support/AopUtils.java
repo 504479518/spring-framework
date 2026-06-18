@@ -64,6 +64,8 @@ import org.springframework.util.ReflectionUtils;
  * @author Sebastien Deleuze
  * @see org.springframework.aop.framework.AopProxyUtils
  */
+// 学习注释（源码阅读）：AOP 工具类，常用于判断代理、匹配方法等。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public abstract class AopUtils {
 
 	private static final boolean coroutinesReactorPresent = ClassUtils.isPresent(
@@ -316,6 +318,7 @@ public abstract class AopUtils {
 	 * @return sublist of Advisors that can apply to an object of the given class
 	 * (may be the incoming List as-is)
 	 */
+	// 学习注释：Advisor 匹配工具方法：判断候选 Advisor 是否能应用到目标类。
 	public static List<Advisor> findAdvisorsThatCanApply(List<Advisor> candidateAdvisors, Class<?> clazz) {
 		if (candidateAdvisors.isEmpty()) {
 			return candidateAdvisors;

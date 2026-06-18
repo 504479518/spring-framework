@@ -63,6 +63,8 @@ import org.springframework.lang.Nullable;
  * @see ConfigurableBeanFactory#addBeanPostProcessor
  * @see BeanFactoryPostProcessor
  */
+// 学习注释（源码阅读）：Bean 实例阶段扩展点，AOP、@Autowired、Aware 等能力都与它相关。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface BeanPostProcessor {
 
 	/**

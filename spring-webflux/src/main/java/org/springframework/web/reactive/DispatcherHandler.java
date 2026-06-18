@@ -69,6 +69,8 @@ import org.springframework.web.server.adapter.WebHttpHandlerBuilder;
  * @since 5.0
  * @see WebHttpHandlerBuilder#applicationContext(ApplicationContext)
  */
+// 学习注释（源码阅读）：WebFlux 分发器，对应 MVC 的 DispatcherServlet。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class DispatcherHandler implements WebHandler, PreFlightRequestHandler, ApplicationContextAware {
 
 	@Nullable
@@ -139,6 +141,7 @@ public class DispatcherHandler implements WebHandler, PreFlightRequestHandler, A
 
 
 	@Override
+	// 学习注释：WebFlux 请求分发主入口：响应式地查找 Handler、调用 Adapter、处理 HandlerResult。
 	public Mono<Void> handle(ServerWebExchange exchange) {
 		if (this.handlerMappings == null) {
 			return createNotFoundError();

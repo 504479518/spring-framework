@@ -58,6 +58,8 @@ import org.springframework.web.util.pattern.PatternParseException;
  * @author Brian Clozel
  * @since 3.0
  */
+// 学习注释（源码阅读）：带路径匹配条件的拦截器包装。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public final class MappedInterceptor implements HandlerInterceptor {
 
 	private static final PathMatcher defaultPathMatcher = new AntPathMatcher();

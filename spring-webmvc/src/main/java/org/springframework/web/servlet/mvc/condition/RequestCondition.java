@@ -34,6 +34,8 @@ import org.springframework.lang.Nullable;
  * @param <T> the type of objects that this RequestCondition can be combined
  * with and compared to
  */
+// 学习注释（源码阅读）：请求匹配条件接口。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface RequestCondition<T> {
 
 	/**

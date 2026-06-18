@@ -36,6 +36,8 @@ import org.springframework.web.context.request.NativeWebRequest;
  * @author Juergen Hoeller
  * @since 3.1
  */
+// 学习注释（源码阅读）：参数解析器组合，会选择支持当前参数的解析器。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class HandlerMethodArgumentResolverComposite implements HandlerMethodArgumentResolver {
 
 	private final List<HandlerMethodArgumentResolver> argumentResolvers = new ArrayList<>();
@@ -111,6 +113,7 @@ public class HandlerMethodArgumentResolverComposite implements HandlerMethodArgu
 	 */
 	@Override
 	@Nullable
+	// 学习注释：参数解析器组合入口：选择支持当前参数的 resolver 并委托解析。
 	public Object resolveArgument(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
 

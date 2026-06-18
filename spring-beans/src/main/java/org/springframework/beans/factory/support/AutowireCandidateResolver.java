@@ -29,6 +29,8 @@ import org.springframework.lang.Nullable;
  * @author Mark Fisher
  * @since 2.5
  */
+// 学习注释（源码阅读）：候选 Bean 判断策略接口，决定某个 Bean 是否可作为依赖注入候选。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface AutowireCandidateResolver {
 
 	/**

@@ -96,6 +96,8 @@ import org.springframework.util.StringUtils;
  * @see #resolveConstructorOrFactoryMethod
  * @see AbstractAutowireCapableBeanFactory
  */
+// 学习注释（源码阅读）：构造器和工厂方法解析器，负责选择构造器并解析构造参数。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 class ConstructorResolver {
 
 	private static final Object[] EMPTY_ARGS = new Object[0];

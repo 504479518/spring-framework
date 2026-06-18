@@ -40,6 +40,8 @@ import java.util.function.Consumer;
  * @see org.springframework.context.event.EventListener
  */
 @FunctionalInterface
+// 学习注释（源码阅读）：事件监听器接口。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface ApplicationListener<E extends ApplicationEvent> extends EventListener {
 
 	/**

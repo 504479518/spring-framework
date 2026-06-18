@@ -60,6 +60,8 @@ import org.springframework.util.Assert;
  * @see ChildBeanDefinition
  */
 @SuppressWarnings("serial")
+// 学习注释（源码阅读）：合并后的 BeanDefinition，Bean 创建阶段实际使用的元数据。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class RootBeanDefinition extends AbstractBeanDefinition {
 
 	@Nullable

@@ -35,6 +35,8 @@ import org.springframework.lang.Nullable;
  * @see org.springframework.web.servlet.view.ContentNegotiatingViewResolver
  * @see org.springframework.web.servlet.view.BeanNameViewResolver
  */
+// 学习注释（源码阅读）：视图名称到 View 的解析接口。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface ViewResolver {
 
 	/**

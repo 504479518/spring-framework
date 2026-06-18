@@ -65,6 +65,8 @@ import org.springframework.web.util.DisconnectedClientHelper;
  * @author Brian Clozel
  * @since 5.0
  */
+// 学习注释（源码阅读）：把 HttpHandler 请求适配到 WebHandler。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class HttpWebHandlerAdapter extends WebHandlerDecorator implements HttpHandler {
 
 	/**

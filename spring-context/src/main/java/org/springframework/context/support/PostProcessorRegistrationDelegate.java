@@ -59,6 +59,8 @@ import org.springframework.lang.Nullable;
  * @author Stephane Nicoll
  * @since 4.0
  */
+// 学习注释（源码阅读）：后置处理器调度器，负责执行 BeanFactoryPostProcessor 并注册 BeanPostProcessor。
+// 建议结合“源码阅读”目录中的容器启动章节和断点步骤阅读，不要孤立地逐行硬读。
 final class PostProcessorRegistrationDelegate {
 
 	private PostProcessorRegistrationDelegate() {

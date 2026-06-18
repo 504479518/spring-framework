@@ -118,6 +118,8 @@ import org.springframework.util.function.ThrowingSupplier;
  * @see DefaultListableBeanFactory
  * @see BeanDefinitionRegistry
  */
+// 学习注释（源码阅读）：Bean 创建与依赖注入主线，重点看 doCreateBean()、populateBean()、initializeBean()。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory
 		implements AutowireCapableBeanFactory {
 
@@ -561,6 +563,11 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 			throws BeanCreationException {
 
 		// Instantiate the bean.
+		// 学习注释：
+		// doCreateBean() 是 Bean 创建主线。可以按三阶段理解：
+		// 1. createBeanInstance() 实例化对象；
+		// 2. populateBean() 填充属性和依赖；
+		// 3. initializeBean() 执行 Aware、初始化方法和 BeanPostProcessor。
 		BeanWrapper instanceWrapper = null;
 		if (mbd.isSingleton()) {
 			instanceWrapper = this.factoryBeanInstanceCache.remove(beanName);
@@ -575,6 +582,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		// Allow post-processors to modify the merged bean definition.
+		// 学习注释：这里处理的是“合并后的 BeanDefinition”，不是 Bean 实例。
+		// 典型用途是提前解析注入元数据，例如 @Autowired 字段、方法等。
 		synchronized (mbd.postProcessingLock) {
 			if (!mbd.postProcessed) {
 				try {
@@ -590,6 +599,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 		// Eagerly cache singletons to be able to resolve circular references
 		// even when triggered by lifecycle interfaces like BeanFactoryAware.
+		// 学习注释：如果允许循环依赖，Spring 会在属性填充前提前暴露一个 ObjectFactory。
+		// 后续其他 Bean 依赖当前 Bean 时，可以通过这个工厂拿到早期引用。
 		boolean earlySingletonExposure = (mbd.isSingleton() && this.allowCircularReferences &&
 				isSingletonCurrentlyInCreation(beanName));
 		if (earlySingletonExposure) {
@@ -601,9 +612,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		// Initialize the bean instance.
+		// 学习注释：exposedObject 是最终对外暴露的对象。它一开始是原始 bean，
+		// 初始化后可能被 BeanPostProcessor 替换成代理对象，例如 AOP 代理。
 		Object exposedObject = bean;
 		try {
+			// 学习注释：属性填充阶段，@Autowired 字段/方法注入通常在这里触发。
 			populateBean(beanName, mbd, instanceWrapper);
+			// 学习注释：初始化阶段，执行 Aware 回调、初始化方法、BeanPostProcessor 前后置处理。
 			exposedObject = initializeBean(beanName, exposedObject, mbd);
 		}
 		catch (Throwable ex) {
@@ -614,6 +629,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 		}
 
 		if (earlySingletonExposure) {
+			// 学习注释：如果前面提前暴露过单例引用，这里需要确认最终暴露对象与早期引用是否一致。
+			// 如果最终对象被代理包装，而其他 Bean 已经注入了原始对象，就可能抛出循环依赖相关异常。
 			Object earlySingletonReference = getSingleton(beanName, false);
 			if (earlySingletonReference != null) {
 				if (exposedObject == bean) {

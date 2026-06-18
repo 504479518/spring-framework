@@ -42,6 +42,8 @@ import org.springframework.core.Ordered;
  * @see AbstractPlatformTransactionManager
  * @see org.springframework.jdbc.datasource.DataSourceUtils#CONNECTION_SYNCHRONIZATION_ORDER
  */
+// 学习注释（源码阅读）：事务生命周期回调接口。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface TransactionSynchronization extends Ordered, Flushable {
 
 	/** Completion status in case of proper commit. */

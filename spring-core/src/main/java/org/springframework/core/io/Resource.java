@@ -53,6 +53,8 @@ import org.springframework.util.FileCopyUtils;
  * @see ByteArrayResource
  * @see InputStreamResource
  */
+// 学习注释（源码阅读）：Spring 资源抽象，统一 classpath、文件、URL 等资源访问。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface Resource extends InputStreamSource {
 
 	/**

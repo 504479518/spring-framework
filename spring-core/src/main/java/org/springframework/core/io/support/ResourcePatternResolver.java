@@ -55,6 +55,8 @@ import org.springframework.core.io.ResourceLoader;
  * @see org.springframework.context.ApplicationContext
  * @see org.springframework.context.ResourceLoaderAware
  */
+// 学习注释（源码阅读）：支持通配路径的资源解析接口。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface ResourcePatternResolver extends ResourceLoader {
 
 	/**

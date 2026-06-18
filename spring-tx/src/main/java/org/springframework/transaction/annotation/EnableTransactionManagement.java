@@ -160,6 +160,8 @@ import org.springframework.core.Ordered;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Import(TransactionManagementConfigurationSelector.class)
+// 学习注释（源码阅读）：开启声明式事务的注解入口。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public @interface EnableTransactionManagement {
 
 	/**

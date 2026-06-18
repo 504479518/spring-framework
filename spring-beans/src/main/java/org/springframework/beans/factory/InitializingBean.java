@@ -31,6 +31,8 @@ package org.springframework.beans.factory;
  * @see org.springframework.beans.factory.config.BeanDefinition#getPropertyValues()
  * @see org.springframework.beans.factory.support.AbstractBeanDefinition#getInitMethodName()
  */
+// 学习注释（源码阅读）：初始化回调接口，在属性填充后、Bean 可用前执行。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public interface InitializingBean {
 
 	/**

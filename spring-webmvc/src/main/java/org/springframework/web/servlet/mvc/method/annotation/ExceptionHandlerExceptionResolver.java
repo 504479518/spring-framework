@@ -82,6 +82,8 @@ import org.springframework.web.util.DisconnectedClientHelper;
  * @author Brian Clozel
  * @since 3.1
  */
+// 学习注释（源码阅读）：处理 @ExceptionHandler 方法的异常解析器。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class ExceptionHandlerExceptionResolver extends AbstractHandlerMethodExceptionResolver
 		implements ApplicationContextAware, InitializingBean {
 
@@ -434,6 +436,7 @@ public class ExceptionHandlerExceptionResolver extends AbstractHandlerMethodExce
 	 */
 	@Override
 	@Nullable
+	// 学习注释：@ExceptionHandler 异常解析入口：查找能处理当前异常的方法并调用。
 	protected ModelAndView doResolveHandlerMethodException(HttpServletRequest request,
 			HttpServletResponse response, @Nullable HandlerMethod handlerMethod, Exception exception) {
 

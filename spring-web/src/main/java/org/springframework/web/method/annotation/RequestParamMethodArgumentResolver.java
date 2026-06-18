@@ -75,6 +75,8 @@ import org.springframework.web.util.UriComponentsBuilder;
  * @since 3.1
  * @see RequestParamMapMethodArgumentResolver
  */
+// 学习注释（源码阅读）：解析 @RequestParam 和简单参数。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class RequestParamMethodArgumentResolver extends AbstractNamedValueMethodArgumentResolver
 		implements UriComponentsContributor {
 

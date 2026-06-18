@@ -71,6 +71,8 @@ import org.springframework.util.Assert;
  * @see org.springframework.jdbc.datasource.DataSourceTransactionManager
  * @see org.springframework.jdbc.datasource.DataSourceUtils#getConnection
  */
+// 学习注释（源码阅读）：事务上下文 ThreadLocal 绑定中心。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public abstract class TransactionSynchronizationManager {
 
 	private static final ThreadLocal<Map<Object, Object>> resources =

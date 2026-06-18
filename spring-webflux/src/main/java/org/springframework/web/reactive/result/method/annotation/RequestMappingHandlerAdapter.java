@@ -61,6 +61,8 @@ import org.springframework.web.util.DisconnectedClientHelper;
  * @author Brian Clozel
  * @since 5.0
  */
+// 学习注释（源码阅读）：调用 @RequestMapping 方法的 MVC 适配器。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class RequestMappingHandlerAdapter
 		implements HandlerAdapter, DispatchExceptionHandler, ApplicationContextAware, InitializingBean {
 
@@ -261,6 +263,7 @@ public class RequestMappingHandlerAdapter
 	}
 
 	@Override
+	// 学习注释：WebFlux 注解 Controller 调用入口。
 	public Mono<HandlerResult> handle(ServerWebExchange exchange, Object handler) {
 
 		Assert.state(this.methodResolver != null &&

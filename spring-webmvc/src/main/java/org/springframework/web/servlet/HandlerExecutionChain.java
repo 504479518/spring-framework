@@ -37,6 +37,8 @@ import org.springframework.util.CollectionUtils;
  * @since 20.06.2003
  * @see HandlerInterceptor
  */
+// 学习注释（源码阅读）：处理器和拦截器链组合对象。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class HandlerExecutionChain {
 
 	private static final Log logger = LogFactory.getLog(HandlerExecutionChain.class);

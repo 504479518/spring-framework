@@ -48,6 +48,8 @@ import org.springframework.util.Assert;
  * @see #releaseSavepoint
  * @see SimpleTransactionStatus
  */
+// 学习注释（源码阅读）：事务状态默认实现。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class DefaultTransactionStatus extends AbstractTransactionStatus {
 
 	@Nullable

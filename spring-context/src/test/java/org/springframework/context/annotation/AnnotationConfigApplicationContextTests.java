@@ -51,6 +51,8 @@ import static org.springframework.util.StringUtils.uncapitalize;
  * @author Juergen Hoeller
  */
 @SuppressWarnings("resource")
+// 学习注释（源码阅读）：注解容器测试类，适合新手作为断点入口。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 class AnnotationConfigApplicationContextTests {
 
 	@Test

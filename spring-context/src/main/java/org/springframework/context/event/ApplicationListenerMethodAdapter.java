@@ -71,6 +71,8 @@ import org.springframework.util.StringUtils;
  * @author Yanming Zhou
  * @since 4.2
  */
+// 学习注释（源码阅读）：把 @EventListener 方法适配成 ApplicationListener。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class ApplicationListenerMethodAdapter implements GenericApplicationListener {
 
 	private static final boolean reactiveStreamsPresent = ClassUtils.isPresent(

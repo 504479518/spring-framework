@@ -157,6 +157,8 @@ import org.springframework.util.StringUtils;
  * @see Autowired
  * @see Value
  */
+// 学习注释（源码阅读）：@Autowired 注入处理器，字段和方法注入主要从 postProcessProperties() 进入。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationAwareBeanPostProcessor,
 		MergedBeanDefinitionPostProcessor, BeanRegistrationAotProcessor, PriorityOrdered, BeanFactoryAware {
 
@@ -504,8 +506,14 @@ public class AutowiredAnnotationBeanPostProcessor implements SmartInstantiationA
 
 	@Override
 	public PropertyValues postProcessProperties(PropertyValues pvs, Object bean, String beanName) {
+		// 学习注释：
+		// 这是 @Autowired 字段和方法注入的主要入口，属于 BeanPostProcessor 链路。
+		// 它发生在 AbstractAutowireCapableBeanFactory.populateBean() 阶段，
+		// 此时 Bean 实例已经创建出来，但还没有完成初始化。
 		InjectionMetadata metadata = findAutowiringMetadata(beanName, bean.getClass(), pvs);
 		try {
+			// 学习注释：InjectionMetadata 中保存了需要注入的字段和方法。
+			// inject() 会逐个解析依赖，最终通常进入 DefaultListableBeanFactory.resolveDependency()。
 			metadata.inject(bean, beanName, pvs);
 		}
 		catch (BeanCreationException ex) {

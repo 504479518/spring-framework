@@ -64,6 +64,8 @@ import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolv
  * @author Juergen Hoeller
  * @since 3.1
  */
+// 学习注释（源码阅读）：处理 @RequestBody 和 @ResponseBody。
+// 建议结合“源码阅读”目录中的对应章节和断点步骤阅读，不要孤立地逐行硬读。
 public class RequestResponseBodyMethodProcessor extends AbstractMessageConverterMethodProcessor {
 
 	/**
@@ -143,6 +145,7 @@ public class RequestResponseBodyMethodProcessor extends AbstractMessageConverter
 	 */
 	@Override
 	@Nullable
+	// 学习注释：@RequestBody 参数解析入口：读取请求体并通过消息转换器反序列化。
 	public Object resolveArgument(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer,
 			NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
 
@@ -187,6 +190,7 @@ public class RequestResponseBodyMethodProcessor extends AbstractMessageConverter
 	}
 
 	@Override
+	// 学习注释：@ResponseBody 返回值处理入口：通过消息转换器写入响应体。
 	public void handleReturnValue(@Nullable Object returnValue, MethodParameter returnType,
 			ModelAndViewContainer mavContainer, NativeWebRequest webRequest)
 			throws IOException, HttpMediaTypeNotAcceptableException, HttpMessageNotWritableException {
